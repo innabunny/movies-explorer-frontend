@@ -1,0 +1,107 @@
+.about-project {
+  padding: 110px 70px;
+  margin: 0;
+  text-align: start;
+  color: #000000;
+
+}
+
+.about-project__title {
+  max-width: 100%;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 26px;
+  border-bottom: 1px solid #000000;
+  margin: 0;
+  padding-bottom: 23px;
+}
+
+.about-project__container {
+  display: grid;
+  /*grid-template-columns: repeat(2, fit-content(550px));*/
+  grid-template-columns: minmax(319px, 600px) minmax(319px, 600px);
+  grid-gap: 26px 40px;
+  padding-top: 70px;
+}
+
+.about-project__subtitle {
+  margin: 0;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.about-project__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+.about-project__infographic {
+  display: grid;
+  grid-template-columns: minmax(110px, 250px) minmax(300px, 1000px);
+  grid-template-rows: 36px 17px;
+  row-gap: 14px;
+  padding-top: 110px;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.about-project__infographic-title {
+  margin: 0;
+  height: 100%;
+  background-color: #2BE080;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-project__infographic-title_grey {
+  background-color: #F2F2F2;
+}
+.about-project__infographic-text {
+  margin: 0;
+  color: #A0A0A0;
+}
+
+@media screen and (max-width: 800px){
+  .about-project__container {
+    grid-template-columns: minmax(150px, 310px) minmax(150px, 310px);
+    grid-gap: 22px 30px;
+  }
+
+  .about-project__text{
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+@media screen and (max-width: 500px){
+  .about-project__subtitle {
+    max-width: 284px;
+    font-size: 18px;
+    line-height: 21px;
+  }
+  .about-project__subtitle:last-of-type {
+    grid-row: 3;
+    margin-top: 40px;
+  }
+  .about-project__text{
+
+    font-size: 11px;
+    line-height: 16px;
+  }
+  .about-project__container {
+    grid-template-columns: none;
+    grid-template-rows: repeat(2, fit-content(44px));
+    row-gap: 16px;
+  }
+  .about-project__infographic {
+    grid-template-columns: minmax(100px, 184px) minmax(100px, 184px);
+    grid-template-rows: 35px 14px;
+    row-gap: 10px;
+  }
+}
