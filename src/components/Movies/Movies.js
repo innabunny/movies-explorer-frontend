@@ -1,23 +1,14 @@
 import './Movies.css';
-import { useLocation } from "react-router-dom";
 
 import SearchForm from '../Movies/SearchForm/SearchForm';
 import MoviesCardList from '../Movies/MoviesCardList/MoviesCardList';
-import SavedMovies from "../Movies/SavedMovies/SavedMovies";
 
-function Movies() {
+function Movies({ moviesData }) {
 
-  const location = useLocation();
-
-  return location.pathname === '/saved-movies' ? (
+  return (
     <>
       <SearchForm />
-      <SavedMovies />
-    </>
-  ) : (
-    <>
-      <SearchForm />
-      <MoviesCardList />
+      <MoviesCardList moviesData={moviesData} />
     </>
   )
 }

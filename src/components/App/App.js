@@ -10,6 +10,9 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import Preloader from '../Movies/Preloader/Preloader';
+import SavedMovies from '../SavedMovies/SavedMovies';
+import movies from '../../utils/moviesData.js'
+
 
 function App() {
   return (
@@ -46,7 +49,7 @@ function App() {
         <Route path={'/movies'} element={
           <>
             <Header loggedIn={true}/>
-            <Movies />
+            <Movies moviesData={movies} />
             <Footer />
           </>
         }>
@@ -54,7 +57,7 @@ function App() {
         <Route path={'/saved-movies'} element={
           <>
             <Header loggedIn={true}/>
-            <Movies />
+            <SavedMovies moviesData={movies} />
             <Footer />
           </>
         }>
