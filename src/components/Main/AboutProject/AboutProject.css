@@ -53,14 +53,16 @@
 .about-project__infographic-title {
   margin: 0;
   height: 100%;
-  background-color: #2BE080;
+  background-color: #3456F3;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #FFFFFF;
 }
 
 .about-project__infographic-title_grey {
   background-color: #F2F2F2;
+  color: #000000;
 }
 .about-project__infographic-text {
   margin: 0;
@@ -68,6 +70,9 @@
 }
 
 @media screen and (max-width: 800px){
+  .about-project {
+    padding: 90px 50px;
+  }
   .about-project__container {
     grid-template-columns: minmax(150px, 310px) minmax(150px, 310px);
     grid-gap: 22px 30px;
@@ -80,6 +85,9 @@
 }
 
 @media screen and (max-width: 500px){
+  .about-project {
+    padding: 70px 18px;
+  }
   .about-project__subtitle {
     max-width: 284px;
     font-size: 18px;

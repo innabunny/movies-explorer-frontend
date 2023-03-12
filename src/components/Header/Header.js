@@ -4,7 +4,6 @@ import Navigation from '../Navigation/Navigation';
 
 function Header({ loggedIn }) {
   return !loggedIn ? (
-    <>
       <header className="header">
         <Link to="/" className="header__logo"></Link>
         <nav className="header__links">
@@ -12,9 +11,8 @@ function Header({ loggedIn }) {
           <Link className="header__login" to='/signin'>Войти</Link>
         </nav>
       </header>
-    </>
   ) : (
-    <header className="header header-light">
+    <header className="header header-main">
       <Link to="/" className="header__logo"></Link>
       <Navigation />
     </header>

@@ -1,61 +1,130 @@
 .promo {
-  background-color: #073042;
-  width: 100%;
+  background-color: #DDDEE3;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 75px 70px;
+  /*margin: 0 auto;*/
+}
+
+.promo__description{
   display: flex;
   flex-direction: column;
+  text-align: start;
+  max-width: 640px;
 }
 
 .promo__title {
-  color: #FFFFFF;
+  color: #000000;
   font-size: 50px;
   line-height: 58px;
   font-weight: 400;
-  text-align: center;
-  margin: 0 auto;
-  padding: 184px 0 224px 0;
-  max-width: 730px;
   letter-spacing: -0.04em;
+  margin: 0;
+}
+
+.promo__text {
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 400;
+  color: #000000;
+  mix-blend-mode: normal;
+  opacity: 0.5;
+  padding-top: 36px;
+  margin: 0;
+}
+
+.promo__btn {
+  width: 129px;
+  height: 36px;
+  border: 1px solid #000000;
+  border-radius: 3px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #000000;
+  background-color: transparent;
+  margin-top: 146px;
+  cursor: pointer;
+}
+
+.promo__link {
+  width: 129px;
+
+}
+
+.promo__btn:hover {
+  transition: 0.3s linear;
+  opacity: .7;
 }
 
 .promo__img {
-  position: absolute;
-  background-size: cover;
+  background-position: center;
   object-fit: cover;
-  width: 320px;
-  height: 320px;
-  opacity: 0.7;
-  top: 21%;
-  left: 37.5%;
-  color: #FFFFFF;
+  width: 310px;
+  height: 304px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 900px) {
+  .promo__img {
+    max-width: 300px;
+    height: 100%;
+  }
+  .promo__title {
+    font-size: 40px;
+    line-height: 50px;
+  }
+  .promo__description {
+    max-width: 300px;
+  }
 }
 
 @media screen and (max-width: 769px) {
-  .promo__img {
-    left: 29%;
+  .promo {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .promo__description{
+    text-align: center;
+    padding-top: 48px;
+    align-items: center;
   }
   .promo__title {
-    margin: 0;
+    font-size: 40px;
+    line-height: 50px;
+  }
+  .promo__text {
+    max-width: 260px;
+  }
+  .promo__btn {
+    margin-top: 92px;
+  }
+  .promo__img {
+    order: -1;
   }
 }
 
 @media screen and (max-width: 600px){
-  .promo__img {
-    top: 26%;
-    left: 18%;
-  }
 }
 
 @media screen and (max-width: 400px) {
+  .promo {
+    padding: 70px 10px 30px 10px;
+  }
   .promo__img {
-    top: 27%;
-    left: 12%;
     width: 248px;
     height: 248px;
   }
 
   .promo__title {
-    font-size: 31px;
-    line-height: 39px;
+    font-size: 30px;
+    line-height: 38px;
+  }
+
+  .promo__btn {
+    margin-top: 80px;
   }
 }
 

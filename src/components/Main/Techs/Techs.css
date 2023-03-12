@@ -2,7 +2,7 @@
   background-color: #F5F5F5;
   padding: 100px 70px;
   color: #000000;
-
+  max-width: 100%;
 }
 
 .techs__title {
@@ -52,6 +52,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media screen and (max-width: 900px){
+  .techs {
+    padding: 90px 50px;
+  }
 }
 
 @media screen and (max-width: 768px){

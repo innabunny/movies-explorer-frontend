@@ -63,10 +63,11 @@ function App() {
         }>
         </Route>
 
-        <Route path={'test'} element={
+        <Route path={'/test'} element={
           <Preloader />
         }>
         </Route>
+
         <Route path={'*'} element={
             <NotFound />
           }>
