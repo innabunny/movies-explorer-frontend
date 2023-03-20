@@ -29,6 +29,10 @@
   padding-bottom: 13px;
 }
 
+.search-form__input:focus {
+  background-color: transparent;
+}
+
 .search__btn {
   cursor: pointer;
   position: absolute;

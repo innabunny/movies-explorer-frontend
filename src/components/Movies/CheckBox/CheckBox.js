@@ -1,8 +1,17 @@
 import './CheckBox.css';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 function CheckBox() {
-  const [isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    if (isActive) {
+      localStorage.setItem("checkbox", "true");
+
+    } else {
+      localStorage.removeItem("checkbox");
+    }
+  }, [isActive])
 
   return (
     <div className="checkbox">
