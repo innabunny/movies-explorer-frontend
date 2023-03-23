@@ -125,8 +125,6 @@ function App() {
       .then((updateUser) => {
         setLoggedIn(true);
         setCurrentUser(updateUser);
-        localStorage.setItem('name', updateUser.name);
-        localStorage.setItem('email', updateUser.email);
         setErrorMessageProfile('Профиль успешно обновлен!');
       })
       .catch((err) => {
@@ -137,7 +135,7 @@ function App() {
         }
       })
       .finally(() => {
-        setTimeout(() => setErrorMessageProfile(""), 2000);
+        setTimeout(() => setErrorMessageProfile(""), 1000);
       })
   }
 
