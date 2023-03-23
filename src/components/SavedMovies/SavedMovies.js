@@ -20,7 +20,6 @@ function SavedMovies({ movies, handleDeleteMovies, onSearch, loading, renderedMo
         movies={(renderedMovies.length > 0) ? renderedMovies : movies}
         key={movies.id}
         handleDeleteMovie={handleDeleteMovies}
-
       />
         )}
     </>

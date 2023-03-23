@@ -9,19 +9,17 @@ function SearchForm({ findMovies }) {
   const pageMovie = location.pathname === '/movies';
   const [checkboxStatus, setCheckboxStatus] = useState(false);
 
-  const { register, handleSubmit, watch, } = useForm({mode: "onBlur",
-    defaultValues: {inputSearch: pageMovie && localStorage.getItem("inputSearchMovie")}});
+  const { register, handleSubmit, watch, } = useForm({mode: "onBlur",});
 
   const inputSearch = watch(pageMovie ? "inputSearchMovie" : "inputSearchSavedMovie");
-
 
   function handleChangeCheckbox(evt) {
       setCheckboxStatus(evt.target.checked);
   }
 
   function onSubmit() {
-    findMovies(inputSearch, checkboxStatus);
     pageMovie && localStorage.setItem("inputSearchMovie", inputSearch);
+    findMovies(inputSearch, checkboxStatus);
   }
 
   useEffect(() => {
@@ -33,7 +31,7 @@ function SearchForm({ findMovies }) {
         setCheckboxStatus(false);
       }
     }
-  }, [pageMovie]);
+  }, [location.pathname]);
 
   return (
     <section className="search-form">
@@ -43,8 +41,9 @@ function SearchForm({ findMovies }) {
       >
         <input
           {...register(pageMovie ? "inputSearchMovie" : "inputSearchSavedMovie",
-            {required: {value: true, message: "Введите ключевое слово"}, value: pageMovie ? localStorage.getItem("inputSearchMovie")
-                : localStorage.getItem("inputSearchSavedMovie"), minLength: 1})}
+            {required: {value: true, message: "Введите ключевое слово"}, value: pageMovie ?
+                localStorage.getItem("inputSearchMovie") : localStorage.getItem("inputSearchSavedMovie"),
+                minLength: 1})}
           className="search-form__input"
           type="text"
           placeholder="Фильм"

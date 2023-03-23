@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import { Navigate, Route, Routes, useLocation, useNavigate,} from "react-router-dom";
-import { CurrentUserContext } from '../../context/CurrentUserContext';
+import {Navigate, Route, Routes, useLocation, useNavigate,} from "react-router-dom";
+import {CurrentUserContext} from '../../context/CurrentUserContext';
 import mainApi from '../../utils/MainApi';
 import moviesApi from '../../utils/MoviesApi';
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
@@ -25,14 +25,10 @@ function App() {
   const [errorMessageProfile, setErrorMessageProfile] = useState("");
 
   const [loading, setLoading] = useState(false);
-  // const [checkboxStatus, setCheckboxStatus] = useState(false);
 
-  const [apiMovies, setApiMovies] = useState([]);
   const [renderedMovies, setRenderedMovies] = useState([]);
   const [renderedSavedMovies, setRenderedSavedMovies] = useState([]);
-  const [shortMovies, setShortMovies] = useState([]);
   const [shortSavedMovies, setShortSavedMovies] = useState([]);
-
   const [savedMovies, setSavedMovies] = useState([]);
 
   const navigate = useNavigate();
@@ -77,7 +73,7 @@ function App() {
 
   function startPreloader() {
     setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
+    setTimeout(() => setLoading(false), 1500);
   }
 
   function handleRegister(name, email, password) {
@@ -150,27 +146,25 @@ function App() {
     if (!localStorage.getItem("apiMovies")) {
       moviesApi.getMovies()
         .then((movies) => {
-          setApiMovies(movies);
-        })
-        .then(() => {
-          localStorage.setItem("apiMovies", JSON.stringify(apiMovies));
+          localStorage.setItem("apiMovies", JSON.stringify(movies));
         })
         .catch(() => setErrorMessage("Ошибка получения данных. Подождите и попробуйте еще раз."));
-    } else {
-      const movies = JSON.parse(localStorage.getItem("apiMovies"));
-      setApiMovies(movies);
     }
 
-    if (checkboxStatus) {
-        setShortMovies(apiMovies.filter((item) => item.duration < 40 ? item : null));
-        let searchMovie = shortMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
+    if (localStorage.getItem("apiMovies")) {
+      const movies = Object.values(JSON.parse(localStorage.getItem("apiMovies")));
+      if (checkboxStatus) {
+        const shortMovies = movies.filter((item) => item.duration < 40 ? item : null);
+        const searchMovie = shortMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
         setRenderedMovies(searchMovie);
         localStorage.setItem("lastFoundMovies", JSON.stringify(searchMovie));
       } else {
-        let searchMovie = apiMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
+        const searchMovie = movies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
         setRenderedMovies(searchMovie);
+        console.log(renderedMovies);
         localStorage.setItem("lastFoundMovies", JSON.stringify(searchMovie));
       }
+    }
   }
 
   function findSavedMovies(valueSearch, checkboxStatus) {
