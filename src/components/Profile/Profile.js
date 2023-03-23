@@ -52,8 +52,8 @@ function Profile({ handleUpdateDataUser,  handleLogout, errMessageProfile, curre
         <button className={`profile__button ${check && "profile__button_disabled"}`} type="button"
                 onClick={() => setCheck(true)} >Редактировать</button>
         <button className={`profile__button-submit ${check && "profile__button-submit_visible"} 
-          ${(isValid && (profileName === currentUser.name || profileEmail === currentUser.email)) && "profile__button-submit_enabled"}`}
-                type="submit" >Сохранить</button>
+          ${(isValid && (currentUser.name === profileName || currentUser.email === profileEmail)) && "profile__button-submit_enabled"}`}
+                type="submit">Сохранить</button>
         <Link className="profile__link-out" to="/" onClick={handleLogout}>
           Выйти из аккаунта
         </Link>
