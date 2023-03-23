@@ -167,7 +167,6 @@ function App() {
     }
   }
 
-
   function findSavedMovies(valueSearch, checkboxStatus) {
     startPreloader();
     setShortSavedMovies(savedMovies.filter((item) => item.duration < 40 ? item : null));
