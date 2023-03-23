@@ -6,4 +6,5 @@ function ProtectedRoute({ children, ...props }) {
     props.loggedIn ? children : <Navigate replace to="/" />
   );
 }
+
 export default ProtectedRoute;
