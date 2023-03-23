@@ -114,6 +114,7 @@ function App() {
 
   function handleLogout() {
     localStorage.clear();
+    setRenderedMovies([]);
     setLoggedIn(false);
     navigate('/');
   }
@@ -150,9 +151,8 @@ function App() {
         })
         .catch(() => setErrorMessage("Ошибка получения данных. Подождите и попробуйте еще раз."));
     }
-
     if (localStorage.getItem("apiMovies")) {
-      const movies = Object.values(JSON.parse(localStorage.getItem("apiMovies")));
+      const movies = JSON.parse(localStorage.getItem("apiMovies"));
       if (checkboxStatus) {
         const shortMovies = movies.filter((item) => item.duration < 40 ? item : null);
         const searchMovie = shortMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
@@ -166,6 +166,7 @@ function App() {
       }
     }
   }
+
 
   function findSavedMovies(valueSearch, checkboxStatus) {
     startPreloader();
