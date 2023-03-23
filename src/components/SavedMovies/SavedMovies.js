@@ -5,7 +5,6 @@ import Preloader from "../Movies/Preloader/Preloader";
 
 function SavedMovies({ movies, handleDeleteMovies, onSearch, loading, renderedMovies }) {
 
-
   return(
     <>
       <SearchForm
@@ -18,7 +17,7 @@ function SavedMovies({ movies, handleDeleteMovies, onSearch, loading, renderedMo
         :
         (movies.length === 0 && renderedMovies.length === 0) ? "Ничего не найдено" : (
       <MoviesCardList
-        movies={localStorage.getItem("inputSearchSavedMovie") ? renderedMovies : movies}
+        movies={(renderedMovies.length > 0) ? renderedMovies : movies}
         key={movies.id}
         handleDeleteMovie={handleDeleteMovies}
 

@@ -1,16 +1,14 @@
 import './Profile.css';
 import React, {useState} from "react";
 import { Link } from "react-router-dom";
-import { CurrentUserContext } from "../../context/CurrentUserContext";
 import { useForm } from "react-hook-form";
 
-function Profile({ handleUpdateDataUser,  handleLogout, errMessageProfile}) {
-  const currentUser = React.useContext(CurrentUserContext);
+function Profile({ handleUpdateDataUser,  handleLogout, errMessageProfile, currentUser}) {
   const [check, setCheck] = useState(false);
 
-  let { register, handleSubmit, watch, formState: { errors, isValid }} =
+  const { register, handleSubmit, watch, formState: { errors, isValid }} =
     useForm({mode: "onBlur", defaultValues:
-      {profileName: currentUser.name, profileEmail: currentUser.email}})
+        {profileName: currentUser.name, profileEmail: currentUser.email}});
 
   const [profileName, profileEmail] = watch(["profileName", "profileEmail"]);
 
@@ -54,7 +52,7 @@ function Profile({ handleUpdateDataUser,  handleLogout, errMessageProfile}) {
         <button className={`profile__button ${check && "profile__button_disabled"}`} type="button"
                 onClick={() => setCheck(true)} >Редактировать</button>
         <button className={`profile__button-submit ${check && "profile__button-submit_visible"} 
-          ${isValid && (profileName !== currentUser.name && profileEmail !== currentUser.email) && "profile__button-submit_enabled"}`}
+          ${(isValid && (profileName === currentUser.name || profileEmail === currentUser.email)) && "profile__button-submit_enabled"}`}
                 type="submit" >Сохранить</button>
         <Link className="profile__link-out" to="/" onClick={handleLogout}>
           Выйти из аккаунта

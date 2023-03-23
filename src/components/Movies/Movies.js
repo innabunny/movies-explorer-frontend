@@ -5,11 +5,11 @@ import MoviesCardList from '../Movies/MoviesCardList/MoviesCardList';
 import Preloader from "../Movies/Preloader/Preloader";
 
 function Movies({ movies, errorMessage, onSearch, loading,
-                  handleSavedMovie, savedMovies, handleDeleteMovie, checkbox }) {
+                  handleSavedMovie, savedMovies, handleDeleteMovie }) {
 
   return (
     <>
-      <SearchForm findMovies={onSearch} checkbox={checkbox} />
+      <SearchForm findMovies={onSearch} />
       {loading ?
         <div className="movies__preloader">
           <Preloader />

@@ -1,25 +1,16 @@
 import './CheckBox.css';
-import {useEffect, useState} from "react";
 
-function CheckBox() {
-  const [isActive, setIsActive] = useState(false);
-
-  useEffect(() => {
-    if (isActive) {
-      localStorage.setItem("checkbox", "true");
-
-    } else {
-      localStorage.removeItem("checkbox");
-    }
-  }, [isActive])
+function CheckBox({ checkboxStatus, handleChangeCheckbox }) {
 
   return (
     <div className="checkbox">
-      <button
-          className={`checkbox__btn ${isActive ? "checkbox__btn__active" : "checkbox__btn__disabled"}`}
-          type="button"
-          onClick={() => {setIsActive(!isActive)}}
-      />
+      <label className={`checkbox__wrapper ${checkboxStatus ? "checkbox__wrapper__active" : "checkbox__wrapper__disabled"}`}>
+        <input
+          type="checkbox"
+          onChange={handleChangeCheckbox}
+          value={checkboxStatus}
+        />
+      </label>
       <span className="checkbox__text">Короткометражки</span>
     </div>
   )

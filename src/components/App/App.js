@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Route, Routes, useNavigate,} from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useNavigate,} from "react-router-dom";
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 import mainApi from '../../utils/MainApi';
 import moviesApi from '../../utils/MoviesApi';
@@ -25,6 +25,7 @@ function App() {
   const [errorMessageProfile, setErrorMessageProfile] = useState("");
 
   const [loading, setLoading] = useState(false);
+  // const [checkboxStatus, setCheckboxStatus] = useState(false);
 
   const [apiMovies, setApiMovies] = useState([]);
   const [renderedMovies, setRenderedMovies] = useState([]);
@@ -35,10 +36,44 @@ function App() {
   const [savedMovies, setSavedMovies] = useState([]);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     handleTokenCheck();
   }, [loggedIn])
+
+  useEffect(() => {
+    if (loggedIn) {
+      mainApi.getSavedMovies()
+        .then((res) => {
+          setSavedMovies(res);
+        })
+        .catch((err) => console.log(err))
+    }
+  }, [loggedIn])
+
+  useEffect(() => {
+    setRenderedSavedMovies([]);
+    if (localStorage.getItem("lastFoundMovies")) {
+      setRenderedMovies(JSON.parse(localStorage.getItem("lastFoundMovies")));
+    }
+  }, [location.pathname]);
+
+  const handleTokenCheck = () => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      mainApi
+        .getUserInfo(jwt)
+        .then((res) => {
+          if (res) {
+            setLoggedIn(true);
+            setCurrentUser(res);
+            navigate(location);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }
 
   function startPreloader() {
     setLoading(true);
@@ -78,33 +113,16 @@ function App() {
         else {
           setErrorMessageLog("Внутренняя ошибка сервера");
         }
-
       });
   }
 
   function handleLogout() {
-    setLoggedIn(false);
     localStorage.clear();
+    setLoggedIn(false);
     navigate('/');
   }
 
-  const handleTokenCheck = () => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      mainApi
-        .getUserInfo(jwt)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true)
-            setCurrentUser(res)
-          }
-        })
-        .catch((err) => console.log(err))
-    }
-  }
-
   function handleUpdateUser(name, email) {
-    // const token = localStorage.getItem('jwt');
     mainApi
       .editProfile({name, email})
       .then((updateUser) => {
@@ -115,40 +133,54 @@ function App() {
         setErrorMessageProfile('Профиль успешно обновлен!');
       })
       .catch((err) => {
-        if (err === 'Ошибка: 409') {
+        if (err.includes(409)) {
           setErrorMessageProfile('Пользователь с таким email уже существует');
         } else {
           setErrorMessageProfile('При обновлении профиля произошла ошибка');
         }
       })
       .finally(() => {
-        setTimeout(() => setErrorMessageProfile(""), 1000);
+        setTimeout(() => setErrorMessageProfile(""), 2000);
       })
   }
 
-  function findMovies(value) {
+  function findMovies(valueSearch, checkboxStatus) {
     startPreloader();
-    setRenderedMovies([]);
-    if (localStorage.getItem("checkbox")) {
-        let searchMovie = shortMovies.filter((item) => item.nameRU.toLowerCase().includes(value.toLowerCase()) ? item : null);
+    localStorage.setItem("checkboxStatus", checkboxStatus);
+    if (!localStorage.getItem("apiMovies")) {
+      moviesApi.getMovies()
+        .then((movies) => {
+          setApiMovies(movies);
+        })
+        .then(() => {
+          localStorage.setItem("apiMovies", JSON.stringify(apiMovies));
+        })
+        .catch(() => setErrorMessage("Ошибка получения данных. Подождите и попробуйте еще раз."));
+    } else {
+      const movies = JSON.parse(localStorage.getItem("apiMovies"));
+      setApiMovies(movies);
+    }
+
+    if (checkboxStatus) {
+        setShortMovies(apiMovies.filter((item) => item.duration < 40 ? item : null));
+        let searchMovie = shortMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
         setRenderedMovies(searchMovie);
+        localStorage.setItem("lastFoundMovies", JSON.stringify(searchMovie));
       } else {
-        let searchMovie = apiMovies.filter((item) => item.nameRU.toLowerCase().includes(value.toLowerCase()) ? item : null);
+        let searchMovie = apiMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
         setRenderedMovies(searchMovie);
+        localStorage.setItem("lastFoundMovies", JSON.stringify(searchMovie));
       }
-    localStorage.setItem("lastFoundMovies", JSON.stringify(renderedMovies));
   }
 
-  function findSavedMovies(value) {
+  function findSavedMovies(valueSearch, checkboxStatus) {
     startPreloader();
-    setRenderedSavedMovies([]);
     setShortSavedMovies(savedMovies.filter((item) => item.duration < 40 ? item : null));
-    if (localStorage.getItem("checkbox")) {
-        let searchMovie = shortSavedMovies.filter((item) => item.nameRU.toLowerCase().includes(value.toLowerCase()) ? item : null);
+    if (checkboxStatus) {
+        let searchMovie = shortSavedMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
         setRenderedSavedMovies(searchMovie);
       } else {
-        let searchMovie = savedMovies.filter((item) => {
-          return item.nameRU.toLowerCase().includes(value.toLowerCase()) ? item : null; });
+        let searchMovie = savedMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
         setRenderedSavedMovies(searchMovie);
       }
   }
@@ -159,7 +191,6 @@ function App() {
         const updatedSavedMovies = [...savedMovies, { ...res, id: res.movieId }];
         setSavedMovies(updatedSavedMovies);
         setShortSavedMovies(updatedSavedMovies.filter((item) => item.duration < 40 ? item : null));
-        localStorage.setItem("savedMovies", JSON.stringify(updatedSavedMovies));
       })
       .catch(err => console.log(err));
   }
@@ -177,38 +208,6 @@ function App() {
       })
   }
 
-  useEffect(() => {
-    if (loggedIn) {
-      if (!localStorage.getItem("savedMovies")) {
-        mainApi.getSavedMovies()
-          .then((res) => {
-            // const findSavedMovies = res.filter((m) => m.owner._id === currentUser._id);
-            setSavedMovies(res);
-            localStorage.setItem("savedMovies", JSON.stringify(res));
-          })
-          .catch((err) => console.log(err))
-      } else {
-        const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
-        setSavedMovies(savedMovies);
-      }
-    }
-  }, [loggedIn])
-
-  useEffect(() => {
-    if (!localStorage.getItem("apiMovies")) {
-      moviesApi.getMovies()
-        .then((movies) => {
-          setApiMovies(movies);
-          localStorage.setItem("apiMovies", JSON.stringify(movies));
-        })
-        .catch(() => setErrorMessage("Ошибка получения данных. Подождите и попробуйте еще раз."));
-    } else {
-      const movies = JSON.parse(localStorage.getItem("apiMovies"));
-      setApiMovies(movies);
-    }
-    setShortMovies(apiMovies.filter((item) => item.duration < 40 ? item : null));
-  }, [loggedIn])
-
   return (
     <div className="App">
       <CurrentUserContext.Provider value={ currentUser }>
@@ -222,7 +221,8 @@ function App() {
             }>
             </Route>
 
-            <Route exact path={'/signup'} element={
+            <Route path={'/signup'} element={ loggedIn ?
+              <Navigate replace to={"/movies"} /> :
               <Register
                 handleRegister={handleRegister}
                 errorMessageReg={errorMessageReg}
@@ -230,7 +230,8 @@ function App() {
             }>
             </Route>
 
-            <Route exact path={'/signin'} element={
+            <Route exact path={'/signin'} element={ loggedIn ?
+              <Navigate replace to={"/movies"} /> :
               <Login
                 handleLogin={handleLogin}
                 errorMessageLog={errorMessageLog}
@@ -239,13 +240,14 @@ function App() {
             </Route>
 
             <Route path={'/profile'} element={
-              <ProtectedRoute loggedIn={loggedIn}>
+              <ProtectedRoute loggedIn={loggedIn} >
                 <>
                   <Header loggedIn={loggedIn}/>
                   <Profile
                     errMessageProfile={errorMessageProfile}
                     handleUpdateDataUser={handleUpdateUser}
                     handleLogout={handleLogout}
+                    currentUser={currentUser}
                   />
                 </>
               </ProtectedRoute>
@@ -284,9 +286,9 @@ function App() {
                   <Footer />
                 </>
               </ProtectedRoute>
-
             }>
             </Route>
+
 
             <Route path={'*'} element={
               <NotFound />
