@@ -85,6 +85,7 @@
   color: #C2C2C2;
   width: 396px;
   height: 45px;
+  /*background-color: #3456F3;*/
   background-color: #F8F8F8;
   border: none;
   border-radius: 3px;
@@ -97,13 +98,13 @@
 .profile__button-submit_visible {
   display: block;
 }
+
 .profile__button-submit_enabled {
   /*display: block;*/
   color: #FFFFFF;
   background-color: #3456F3;
   cursor: pointer;
 }
-
 
 .profile__link-out {
   color: #FF004D;

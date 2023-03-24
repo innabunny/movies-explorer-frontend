@@ -125,6 +125,8 @@ function App() {
       .then((updateUser) => {
         setLoggedIn(true);
         setCurrentUser(updateUser);
+        localStorage.setItem("userName", updateUser.name);
+        localStorage.setItem("userEmail", updateUser.email);
         setErrorMessageProfile('Профиль успешно обновлен!');
       })
       .catch((err) => {
@@ -239,7 +241,6 @@ function App() {
                     errMessageProfile={errorMessageProfile}
                     handleUpdateDataUser={handleUpdateUser}
                     handleLogout={handleLogout}
-                    currentUser={currentUser}
                   />
                 </>
               </ProtectedRoute>
