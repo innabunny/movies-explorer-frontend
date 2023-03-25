@@ -1,30 +1,34 @@
 import React, {useEffect, useState} from "react";
+import { useLocation } from "react-router-dom";
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import {useLocation} from "react-router-dom";
+import {
+  INITIAL_MOVIES_DESKTOP, SCREEN_SIZE_DESKTOP, LOAD_MORE_DESKTOP, SCREEN_SIZE_MOBILE, COUNTER_MOVIES_MOBILE,
+  LOAD_MORE_MOVIES_MOBILE, COUNTER_MOVIES_DESKTOP
+} from '../../../utils/constants';
 
 function MoviesCardList ({ movies, handleSavedMovie, savedMovies, handleDeleteMovie }) {
   const location = useLocation();
   const innerWidth = window.innerWidth;
-  const [counter, setCounter] = useState(12);
+  const [counter, setCounter] = useState(INITIAL_MOVIES_DESKTOP);
 
   useEffect(() => {
-    if (innerWidth < 1200) {
-      setCounter(8);
+    if (innerWidth < SCREEN_SIZE_DESKTOP) {
+      setCounter(COUNTER_MOVIES_DESKTOP);
       return
     }
-    if (innerWidth < 500) {
-      setCounter(5);
+    if (innerWidth < SCREEN_SIZE_MOBILE) {
+      setCounter(COUNTER_MOVIES_MOBILE);
     }
   }, [innerWidth])
 
   function loadMoreMovies() {
-    if (innerWidth > 1200) {
-      setCounter(counter + 3);
+    if (innerWidth > SCREEN_SIZE_DESKTOP) {
+      setCounter(counter + LOAD_MORE_DESKTOP);
       return;
     }
-    if (innerWidth < 1200) {
-      setCounter(counter + 2);
+    if (innerWidth < SCREEN_SIZE_DESKTOP) {
+      setCounter(counter + LOAD_MORE_MOVIES_MOBILE);
     }
   }
 

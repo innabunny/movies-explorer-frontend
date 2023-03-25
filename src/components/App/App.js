@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Navigate, Route, Routes, useLocation, useNavigate,} from "react-router-dom";
-import {CurrentUserContext} from '../../context/CurrentUserContext';
+import { CurrentUserContext } from '../../context/CurrentUserContext';
 import mainApi from '../../utils/MainApi';
 import moviesApi from '../../utils/MoviesApi';
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
@@ -15,6 +15,7 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
+import { SHORT_MOVIE, UNAUTHORIZED__ERR, CONFLICT__ERR } from '../../utils/constants';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -83,7 +84,7 @@ function App() {
         handleLogin(email,password);
       })
       .catch((err) => {
-        if (err.includes(409)) {
+        if (err.includes(CONFLICT__ERR)) {
           setErrorMessageReg("Пользователь с таким email уже существует");
         }
         else {
@@ -103,7 +104,7 @@ function App() {
         }
       })
       .catch((err) => {
-        if (err.includes(401)) {
+        if (err.includes(UNAUTHORIZED__ERR)) {
           setErrorMessageLog("Неправильные почта или пароль");
         }
         else {
@@ -130,7 +131,7 @@ function App() {
         setErrorMessageProfile('Профиль успешно обновлен!');
       })
       .catch((err) => {
-        if (err.includes(409)) {
+        if (err.includes(CONFLICT__ERR)) {
           setErrorMessageProfile('Пользователь с таким email уже существует');
         } else {
           setErrorMessageProfile('При обновлении профиля произошла ошибка');
@@ -154,14 +155,13 @@ function App() {
     if (localStorage.getItem("apiMovies")) {
       const movies = JSON.parse(localStorage.getItem("apiMovies"));
       if (checkboxStatus) {
-        const shortMovies = movies.filter((item) => item.duration < 40 ? item : null);
+        const shortMovies = movies.filter((item) => item.duration < SHORT_MOVIE ? item : null);
         const searchMovie = shortMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
         setRenderedMovies(searchMovie);
         localStorage.setItem("lastFoundMovies", JSON.stringify(searchMovie));
       } else {
         const searchMovie = movies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
         setRenderedMovies(searchMovie);
-        console.log(renderedMovies);
         localStorage.setItem("lastFoundMovies", JSON.stringify(searchMovie));
       }
     }
@@ -169,7 +169,7 @@ function App() {
 
   function findSavedMovies(valueSearch, checkboxStatus) {
     startPreloader();
-    setShortSavedMovies(savedMovies.filter((item) => item.duration < 40 ? item : null));
+    setShortSavedMovies(savedMovies.filter((item) => item.duration < SHORT_MOVIE ? item : null));
     if (checkboxStatus) {
         let searchMovie = shortSavedMovies.filter((item) => item.nameRU.toLowerCase().includes(valueSearch.toLowerCase()) ? item : null);
         setRenderedSavedMovies(searchMovie);
@@ -184,7 +184,7 @@ function App() {
       .then((res) => {
         const updatedSavedMovies = [...savedMovies, { ...res, id: res.movieId }];
         setSavedMovies(updatedSavedMovies);
-        setShortSavedMovies(updatedSavedMovies.filter((item) => item.duration < 40 ? item : null));
+        setShortSavedMovies(updatedSavedMovies.filter((item) => item.duration < SHORT_MOVIE ? item : null));
       })
       .catch(err => console.log(err));
   }
