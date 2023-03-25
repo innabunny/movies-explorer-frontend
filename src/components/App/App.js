@@ -150,6 +150,9 @@ function App() {
         .then((movies) => {
           localStorage.setItem("apiMovies", JSON.stringify(movies));
         })
+        .then(() => {
+          setTimeout(() => findMovies(valueSearch, checkboxStatus), 500);
+        })
         .catch(() => setErrorMessage("Ошибка получения данных. Подождите и попробуйте еще раз."));
     }
     if (localStorage.getItem("apiMovies")) {
