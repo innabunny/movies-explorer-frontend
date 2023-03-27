@@ -72,6 +72,11 @@
   cursor: pointer;
 }
 
+.register__button_disabled {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+}
+
 .register__err {
   margin: 0;
   width: 396px;

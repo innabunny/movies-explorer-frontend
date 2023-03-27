@@ -9,14 +9,16 @@
   height: 281px;
 }
 
+.movie-card__link {
+  list-style-type: none;
+}
 
 .movie-card__img {
   border-radius: 6px 6px 0 0;
   box-sizing: border-box;
   width: 364px;
   height: 203px;
-  object-fit: contain;
-  background-position: center;
+  /*object-fit: cover;*/
 }
 
 .movie-card__description {
